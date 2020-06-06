@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maiqu.mapper.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.maiqu.domain.model.Role">
+        <result property="id" jdbcType="INTEGER" column="id" />
+        <result property="roleName" jdbcType="VARCHAR" column="name" />
+        <result property="roleDesc" jdbcType="VARCHAR" column="role_desc" />
+    </resultMap>
+
+    <select id="getRolesByUserId" parameterType="int" resultMap="BaseResultMap">
+        select r.* from role r left join user_role u on r.id = u.role_id  where u.user_id = #{userId}
+    </select>
+
+    <select id="getRoles" resultMap="BaseResultMap">
+        select * from role
+    </select>
+
+    <select id="findRoleListCount" resultType="Integer">
+        select count(id) from role
+    </select>
+
+    <select id="findRoleList" parameterType="com.maiqu.domain.request.dto.PageDto" resultMap="BaseResultMap">
+        select * from role limit #{pageIndex}, #{pageSize}
+    </select>
+
+    <select id="getRoleByName" parameterType="String" resultMap="BaseResultMap">
+        select * from role where `name` = #{name}
+    </select>
+
+    <select id="getRoleById" parameterType="int" resultMap="BaseResultMap">
+        select * from role where id = #{id}
+    </select>
+
+    <insert id="insertRole" parameterType="com.maiqu.domain.model.Role" useGeneratedKeys="true" keyProperty="id">
+        insert into role ( `name`, role_desc)
+        values( #{roleName}, #{roleDesc})
+    </insert>
+
+    <update id="updateRole" parameterType="com.maiqu.domain.model.Role">
+        update role set `name` = #{roleName}, role_desc = #{roleDesc}  where id = #{id}
+    </update>
+
+    <delete id="deleteRole" parameterType="int">
+        delete from role where id = #{id}
+    </delete>
+
+</mapper>

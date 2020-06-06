@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maiqu.mapper.CourseSelectInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.maiqu.domain.model.CourseSelectInfo">
+        <result property="id" jdbcType="INTEGER" column="id" />
+        <result property="className" jdbcType="VARCHAR" column="class_name" />
+        <result property="classHour" jdbcType="DOUBLE" column="class_hour" />
+        <result property="school" jdbcType="VARCHAR" column="school" />
+        <result property="grade" jdbcType="INTEGER" column="grade" />
+        <result property="studentNumber" jdbcType="INTEGER" column="student_number" />
+        <result property="classDate" jdbcType="TIMESTAMP" column="class_date" />
+        <result property="classTearcher" jdbcType="VARCHAR" column="class_tearcher" />
+        <result property="classAssistants" jdbcType="VARCHAR" column="class_assistants" />
+        <result property="note" jdbcType="VARCHAR" column="note" />
+        <result property="createTime" jdbcType="TIMESTAMP" column="create_time" />
+        <result property="updateTime" jdbcType="TIMESTAMP" column="update_time" />
+        <result property="flag" jdbcType="INTEGER" column="flag" />
+    </resultMap>
+
+
+    <select id="findCourseSelectInfoList" parameterType="com.maiqu.domain.request.dto.PageDto" resultMap="BaseResultMap">
+        select * from course_select_info limit #{pageIndex}, #{pageSize}
+    </select>
+
+    <select id="findCourseSelectInfoCount" resultType="Integer">
+        select count(id) from course_select_info
+    </select>
+
+    <insert id="insertCourseSelectInfo" parameterType="com.maiqu.domain.model.CourseSelectInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into course_select_info ( class_name, class_hour, school, grade, student_number, class_date, class_tearcher, class_assistants, note, create_time, update_time, flag)
+        values( #{className}, #{classHour}, #{school}, #{grade}, #{studentNumber}, #{classDate}, #{classTearcher}, #{classAssistants}, #{note}, #{createTime}, #{updateTime}, #{flag})
+    </insert>
+
+    <update id="updateCourseSelectInfo" parameterType="com.maiqu.domain.model.CourseSelectInfo">
+        update course_select_info set
+        <if test="className != null">
+            class_name = #{className},
+        </if>
+        <if test="classHour != null">
+            class_hour = #{classHour},
+        </if>
+        <if test="school != null">
+            school = #{school},
+        </if>
+        <if test="grade != null">
+            grade = #{grade},
+        </if>
+        <if test="studentNumber != null">
+            student_number = #{studentNumber},
+        </if>
+        <if test="classDate != null">
+            class_date = #{classDate},
+        </if>
+        <if test="classTearcher != null">
+            class_tearcher = #{classTearcher},
+        </if>
+        <if test="classAssistants != null">
+            class_assistants = #{classAssistants},
+        </if>
+        <if test="note != null">
+            note = #{note},
+        </if>
+        <if test="flag != null">
+            flag = #{flag},
+        </if>
+        update_time = #{updateTime}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCourseSelectInfo" parameterType="int">
+        delete from course_select_info where id = #{id}
+    </delete>
+
+    <select id="getCourseSelectInfoById" parameterType="int" resultMap="BaseResultMap">
+        select * from course_select_info where id = #{id}
+    </select>
+
+    <select id="getCourseSelectInfoByName" parameterType="String" resultMap="BaseResultMap">
+        select * from course_select_info where `name` = #{name}
+    </select>
+
+
+
+</mapper>

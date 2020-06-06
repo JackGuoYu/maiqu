@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maiqu.mapper.PrivilegeMapper">
+
+    <resultMap id="PrivilegeResultMap" type="com.maiqu.domain.model.Privilege">
+        <result property="id" jdbcType="INTEGER" column="p1_id" />
+        <result property="privilegeName" jdbcType="VARCHAR" column="p1_name" />
+        <result property="parentId" jdbcType="INTEGER" column="p1_parent_id" />
+        <result property="path" jdbcType="VARCHAR" column="p1_path" />
+        <result property="level" jdbcType="INTEGER" column="p1_level" />
+        <result property="privilegeDesc" jdbcType="VARCHAR" column="p1_privilege_desc" />
+        <collection property="privileges" ofType="com.maiqu.domain.model.Privilege" column="parent_id">
+            <result property="id" jdbcType="INTEGER" column="p2_id" />
+            <result property="privilegeName" jdbcType="VARCHAR" column="p2_name" />
+            <result property="parentId" jdbcType="INTEGER" column="p2_parent_id" />
+            <result property="path" jdbcType="VARCHAR" column="p2_path" />
+            <result property="level" jdbcType="INTEGER" column="p2_level" />
+            <result property="privilegeDesc" jdbcType="VARCHAR" column="p2_privilege_desc" />
+            <collection property="privileges" ofType="com.maiqu.domain.model.Privilege" column="parent_id">
+                <result property="id" jdbcType="INTEGER" column="p3_id" />
+                <result property="privilegeName" jdbcType="VARCHAR" column="p3_name" />
+                <result property="parentId" jdbcType="INTEGER" column="p3_parent_id" />
+                <result property="path" jdbcType="VARCHAR" column="p3_path" />
+                <result property="level" jdbcType="INTEGER" column="p3_level" />
+                <result property="privilegeDesc" jdbcType="VARCHAR" column="p3_privilege_desc" />
+            </collection>
+        </collection>
+    </resultMap>
+
+    <resultMap id="BaseResultMap" type="com.maiqu.domain.model.Privilege">
+        <result property="id" jdbcType="INTEGER" column="id" />
+        <result property="privilegeName" jdbcType="VARCHAR" column="name" />
+        <result property="parentId" jdbcType="INTEGER" column="parent_id" />
+        <result property="path" jdbcType="VARCHAR" column="path" />
+        <result property="level" jdbcType="INTEGER" column="level" />
+        <result property="privilegeDesc" jdbcType="VARCHAR" column="privilege_desc" />
+    </resultMap>
+
+    <select id="getPrivilegeByRoleId" parameterType="int" resultMap="BaseResultMap">
+        select p.* from privilege p left join role_privilege r on r.privilege_id = p.id where r.role_id = #{roleId}
+    </select>
+
+    <select id="getPrivilegeByName" parameterType="String" resultMap="BaseResultMap">
+        select * from privilege where `name` = #{name}
+    </select>
+
+    <select id="getPrivilegeById" parameterType="int" resultMap="BaseResultMap">
+        select * from privilege where id = #{id}
+    </select>
+
+    <delete id="deletePrivilege" parameterType="int">
+        delete from privilege where id = #{id}
+    </delete>
+
+    <insert id="insertPrivilege" parameterType="com.maiqu.domain.model.Privilege" useGeneratedKeys="true" keyProperty="id">
+        insert into privilege ( `name`, parent_id, path, level, privilege_desc)
+        values( #{privilegeName}, #{parentId}, #{path}, #{level}, #{privilegeDesc})
+    </insert>
+
+    <select id="findPrivilegeListCount" resultType="Integer">
+        select count(id) from privilege
+    </select>
+
+    <select id="findPrivilegeList" parameterType="com.maiqu.domain.request.dto.PageDto" resultMap="BaseResultMap">
+        select * from privilege limt #{pageIndex}, #{pageSize}
+    </select>
+
+    <update id="updatePrivilege" parameterType="com.maiqu.domain.model.Privilege">
+        update privilege set
+        <if test="parentId != null">
+            parent_id = #{parentId},
+        </if>
+        <if test="path != null">
+            path = #{path},
+        </if>
+        <if test="level != null">
+            level = #{level},
+        </if>
+        <if test="privilegeDesc != null">
+            privilege_desc = #{privilegeDesc},
+        </if>
+        `name` = #{privilegeName}
+        where id = #{id}
+    </update>
+
+<!--    <select id="getPrivilegeList" resultMap="PrivilegeResultMap">-->
+<!--       select p.id,p.name,p.parent_id,p.path,p.level,p.privilege_desc,-->
+<!--              p2.id ch_id,p2.name ch_name,p2.parent_id ch_parent_id,-->
+<!--              p2.path ch_path,p2.level ch_level,p2.privilege_desc ch_privilege_desc-->
+<!--        from privilege p LEFT JOIN privilege p2 on p.id = p2.parent_id-->
+<!--    </select>-->
+    <select id="getPrivilegeList" resultMap="PrivilegeResultMap">
+       select p1.id p1_id, p1.name p1_name, p1.parent_id p1_parent_id, p1.path p1_path, p1.level p1_level, p1.privilege_desc p1_privilege_desc,
+        p2.id p2_id, p2.name p2_name, p2.parent_id p2_parent_id, p2.path p2_path, p2.level p2_level, p2.privilege_desc p2_privilege_desc,
+        p3.id p3_id, p3.name p3_name, p3.parent_id p3_parent_id, p3.path p3_path, p3.level p3_level, p3.privilege_desc p3_privilege_desc
+        from (select * from privilege where level = 1) p1
+        left join (select * from privilege where level = 2) p2 on p1.id = p2.parent_id
+        left join (select * from privilege where level = 3) p3 on p2.id = p3.parent_id
+    </select>
+
+
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maiqu.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.maiqu.domain.model.User">
+        <result property="id" jdbcType="INTEGER" column="id" />
+        <result property="userName" jdbcType="VARCHAR" column="user_name" />
+        <result property="passWord" jdbcType="VARCHAR" column="password" />
+        <result property="phone" jdbcType="VARCHAR" column="phone" />
+        <result property="sex" jdbcType="INTEGER" column="sex" />
+        <result property="address" jdbcType="VARCHAR" column="address" />
+        <result property="roleId" jdbcType="INTEGER" column="role_id" />
+        <result property="roleName" jdbcType="VARCHAR" column="role_name" />
+        <result property="birthDate" jdbcType="TIMESTAMP" column="birth_date"  />
+        <result property="createTime" jdbcType="TIMESTAMP" column="create_time"  />
+        <result property="updateTime" jdbcType="TIMESTAMP" column="update_time" />
+        <result property="flag" jdbcType="INTEGER" column="flag" />
+    </resultMap>
+
+    <select id="getUser" resultMap="BaseResultMap">
+        select * from user where flag = 1 and id = #{id}
+    </select>
+
+    <select id="findUserList" parameterType="com.maiqu.domain.request.dto.UserDto" resultMap="BaseResultMap">
+        select * from user where flag = 1
+        <if test="keyWord != null">
+            and (id like concat(concat("%",#{keyWord}),"%") or user_name like concat(concat("%",#{keyWord}),"%")
+            or phone like concat(concat("%",#{keyWord}),"%") or address like  concat(concat("%",#{keyWord}),"%"))
+        </if>
+        limit #{pageIndex}, #{pageSize}
+    </select>
+
+    <select id="findUserListCount" parameterType="com.maiqu.domain.request.dto.UserDto" resultType="Integer">
+        select count(id) from user where flag = 1
+        <if test="keyWord != null">
+            and (id like concat(concat("%",#{keyWord}),"%") or user_name like concat(concat("%",#{keyWord}),"%")
+            or phone like concat(concat("%",#{keyWord}),"%") or address like  concat(concat("%",#{keyWord}),"%"))
+        </if>
+    </select>
+
+    <select id="getUserByName" resultMap="BaseResultMap">
+        select * from user where flag = 1 and user_name = #{userName}
+    </select>
+
+    <insert id="insertUser" parameterType="com.maiqu.domain.model.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user ( user_name, password, phone, sex, role_id, role_name, address, birth_date, create_time, update_time, flag)
+        values( #{userName}, #{passWord}, #{phone}, #{sex}, #{roleId}, #{roleName}, #{address}, #{birthDate}, #{createTime}, #{updateTime}, #{flag})
+    </insert>
+
+    <update id="updateUser" parameterType="com.maiqu.domain.model.User">
+        update user set
+        <if test="userName != null">
+            user_name = #{userName},
+        </if>
+        <if test="passWord != null">
+            password = #{passWord},
+        </if>
+        <if test="phone != null">
+            phone = #{phone},
+        </if>
+        <if test="sex != null">
+            sex = #{sex},
+        </if>
+        <if test="roleId != null">
+            role_id = #{roleId},
+        </if>
+        <if test="roleName != null">
+            role_name = #{roleName},
+        </if>
+        <if test="address != null">
+            address = #{address},
+        </if>
+        <if test="birthDate != null">
+            birth_date = #{birthDate},
+        </if>
+        <if test="createTime != null">
+            create_time = #{createTime},
+        </if>
+        <if test="flag != null">
+            flag = #{flag},
+        </if>
+        update_time = #{updateTime}
+        where id = #{id}
+    </update>
+
+
+</mapper>

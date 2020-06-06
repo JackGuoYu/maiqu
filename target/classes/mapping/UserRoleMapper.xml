@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maiqu.mapper.UserRoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.maiqu.domain.model.UserRole">
+        <result property="id" jdbcType="INTEGER" column="id" />
+        <result property="userId" jdbcType="INTEGER" column="user_id" />
+        <result property="roleId" jdbcType="INTEGER" column="role_id" />
+    </resultMap>
+
+    <insert id="bandRole" parameterType="com.maiqu.domain.model.UserRole" useGeneratedKeys="true" keyProperty="id">
+       insert into user_role ( user_id, role_id)
+        values( #{userId}, #{roleId})
+    </insert>
+
+    <delete id="unbandRole" parameterType="com.maiqu.domain.model.UserRole" >
+        delete from user_role where user_id = #{userId} and role_id = #{roleId}
+    </delete>
+
+    <delete id="deleteRole" parameterType="com.maiqu.domain.model.UserRole" >
+        delete from user_role where user_id = #{userId}
+    </delete>
+
+
+</mapper>

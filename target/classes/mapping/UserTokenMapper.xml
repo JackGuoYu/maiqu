@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maiqu.mapper.UserTokenMapper">
+
+    <resultMap id="BaseResultMap" type="com.maiqu.domain.model.UserToken">
+        <result property="id" jdbcType="INTEGER" column="id" />
+        <result property="userId" jdbcType="INTEGER" column="user_id" />
+        <result property="token" jdbcType="VARCHAR" column="token" />
+        <result property="createTime" jdbcType="TIMESTAMP" column="create_time"  />
+        <result property="updateTime" jdbcType="TIMESTAMP" column="update_time" />
+        <result property="flag" jdbcType="INTEGER" column="flag" />
+    </resultMap>
+
+    <select id="getUserToken" resultMap="BaseResultMap">
+        select * from user_token where user_id = #{userId}
+    </select>
+
+    <insert id="insertUserToken" parameterType="com.maiqu.domain.model.UserToken" useGeneratedKeys="true" keyProperty="id">
+        insert into user_token (user_id, token, create_time, update_time, flag)
+        value( #{userId}, #{token}, #{createTime}, #{updateTime}, #{flag})
+    </insert>
+
+    <update id="updateUserToken" parameterType="com.maiqu.domain.model.UserToken">
+        update user_token set token = #{token}, update_time = #{updateTime}  where user_id = #{userId}
+    </update>
+
+
+</mapper>
