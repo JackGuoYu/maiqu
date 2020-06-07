@@ -241,11 +241,13 @@ public class RoleService {
         return privilegeMapper.getPrivilegeList();
     }
 
+
     /**
      * 获取用户对应的权限树
+     * @param flag  true:表示获取用户所属的权限 false:获取全部权限
      * @return
      */
-    public BaseResponse<PrivilegeTree> getPrivilegeTree(){
+    public BaseResponse<PrivilegeTree> getPrivilegeTree(Boolean flag){
         User user = LoginFilter.getUser();
         if(user == null){
             return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"查询不到用户信息");
@@ -274,6 +276,9 @@ public class RoleService {
                 }
                 privileges = setPrivilege(privileges,privilegeIds);
             }
+            if(flag){
+                privileges = handlePrivilege(privileges);
+            }
             role.setSelect(true);
             role.setPrivileges(privileges);
         }
@@ -290,7 +295,27 @@ public class RoleService {
             if(privilege.getPrivileges()!=null && privilege.getPrivileges().size()>0){
                 setPrivilege(privilege.getPrivileges(),privilegeIds);
             }
+        }
+        return privileges;
+    }
 
+
+
+    /**
+     * 过滤用户选中权限
+     * @param privileges
+     * @return
+     */
+    public List<Privilege> handlePrivilege(List<Privilege> privileges){
+        if(privileges!=null && privileges.size()>0) {
+            for (Privilege p : privileges) {
+                List<Privilege> childs = p.getPrivileges();
+                if (childs != null && childs.size() > 0) {
+                    childs = childs.stream().filter(child -> child.isSelect()).collect(Collectors.toList());
+                }
+                p.setPrivileges(childs);
+                handlePrivilege(childs);
+            }
         }
         return privileges;
     }

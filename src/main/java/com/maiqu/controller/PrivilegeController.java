@@ -123,8 +123,8 @@ public class PrivilegeController {
 
     @ApiOperation(value = "获取角色下的权限树", notes = "获取全部权限列表")
     @GetMapping("/privilege/tree")
-    public BaseResponse<List<Privilege>> getPrivilegeTree(){
-        return BaseResponse.success(roleService.getPrivilegeTree());
+    public BaseResponse<List<Privilege>> getPrivilegeTree(Boolean flag){
+        return BaseResponse.success(roleService.getPrivilegeTree(flag));
     }
 
 }
