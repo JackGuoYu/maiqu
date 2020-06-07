@@ -211,14 +211,14 @@ public class ClassInfoService {
         }
         TechInfo techInfo = techInfoMapper.getTechInfoById(techId);
         if(techInfo==null){
-            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"不存在该学员名称");
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"不存在该教学记录");
         }
 
         techInfo.setUpdateTime(LocalDateTime.now());
         techInfo.setFlag(CommonCode.UNACTIVE);
         techInfoMapper.updateTechInfo(techInfo);
         result.setData(true);
-        result.setMsg("删除用户成功");
+        result.setMsg("删除教学成功");
         return result;
     }
 
