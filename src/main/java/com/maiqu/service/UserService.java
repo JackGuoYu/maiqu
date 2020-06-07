@@ -70,7 +70,7 @@ public class UserService {
         }
 
         if(redisUtil.hget(RedisKey.LOGIN_LOCK_KEY,user.getUserName()) != null){
-            return BaseResponse.fail(CommonCode.USER_LOCKED, "该账户被锁定,请等待30分钟后尝试或联系管理员进行解锁");
+            return BaseResponse.fail(CommonCode.USER_LOCKED, "该账户被锁定,请等待30秒后尝试或联系管理员进行解锁");
         }
 
         String md5Pwd = MD5.getMD5Password(password);

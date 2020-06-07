@@ -32,7 +32,7 @@ public class LoginFilter  implements Filter {
         //检验请求头是否携带token
         HttpServletRequest req = (HttpServletRequest) request;
         String requestURI = req.getRequestURI();
-        String[] unFilterUrls = new String[]{"login","register"};
+        String[] unFilterUrls = new String[]{"login","register","/role/list"};
 
         if(!checkPath(requestURI,unFilterUrls)){
             String token = req.getHeader("token") == null? "":req.getHeader("token");

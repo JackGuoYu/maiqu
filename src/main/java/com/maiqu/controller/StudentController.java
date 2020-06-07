@@ -1,5 +1,6 @@
 package com.maiqu.controller;
 
+import com.maiqu.domain.model.Student;
 import com.maiqu.domain.request.StudentVo;
 import com.maiqu.domain.request.UserVo;
 import com.maiqu.domain.request.dto.PageDto;
@@ -39,9 +40,15 @@ public class StudentController {
         return studentService.deleteStudent(userId);
     }
 
-    @ApiOperation(value = "用户列表", notes = "用户列表")
+    @ApiOperation(value = "学员列表", notes = "学员列表")
     @GetMapping("/list")
     public BaseResponse<Page> studentList(PageDto pageDto){
         return studentService.studentList(pageDto);
+    }
+
+    @ApiOperation(value = "用户详情", notes = "用户详情")
+    @GetMapping("/detail")
+    public BaseResponse<Student> studentDetail(Integer stuId){
+        return studentService.studentDetail(stuId);
     }
 }

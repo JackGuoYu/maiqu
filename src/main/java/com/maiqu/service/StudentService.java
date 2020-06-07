@@ -126,7 +126,7 @@ public class StudentService {
     public BaseResponse<Boolean> deleteStudent(Integer stuId){
         BaseResponse<Boolean> result = new BaseResponse<>();
         if(stuId == null){
-            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"账户ID为空");
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"学员ID为空");
         }
         Student student =  studentMapper.getStudent(stuId);
         if(student==null){
@@ -157,5 +157,18 @@ public class StudentService {
         Integer total = studentMapper.findStudentListCount();
         Integer pageNumber = pageDto.getPageNumber(total);
         return BaseResponse.success(Page.success(total,pageNumber,students));
+    }
+
+    /**
+     * 获取学员详情
+     * @param stuId
+     * @return
+     */
+    public BaseResponse<Student> studentDetail(Integer stuId){
+        if(stuId == null){
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"学员ID为空");
+        }
+        Student student = studentMapper.getStudent(stuId);
+        return BaseResponse.success(student);
     }
 }
