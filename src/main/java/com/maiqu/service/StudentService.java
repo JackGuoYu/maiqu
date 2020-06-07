@@ -28,15 +28,6 @@ public class StudentService {
     private StudentMapper studentMapper;
 
     /**
-     * 获取学员信息
-     * @param stuId
-     * @return
-     */
-    public Student getStudent(Integer stuId){
-        return studentMapper.getStudent(stuId);
-    }
-
-    /**
      * 添加学员
      * @param studentVo
      * @return
@@ -130,7 +121,7 @@ public class StudentService {
         }
         Student student =  studentMapper.getStudent(stuId);
         if(student==null){
-            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"不存在该学员名称");
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"不存在该学员记录");
         }
 
 
@@ -169,6 +160,9 @@ public class StudentService {
             return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"学员ID为空");
         }
         Student student = studentMapper.getStudent(stuId);
+        if(student == null){
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"不存在该学员记录");
+        }
         return BaseResponse.success(student);
     }
 }

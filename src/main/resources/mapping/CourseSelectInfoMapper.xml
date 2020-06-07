@@ -20,11 +20,11 @@
 
 
     <select id="findCourseSelectInfoList" parameterType="com.maiqu.domain.request.dto.PageDto" resultMap="BaseResultMap">
-        select * from course_select_info limit #{pageIndex}, #{pageSize}
+        select * from course_select_info where flag = 1 limit #{pageIndex}, #{pageSize}
     </select>
 
     <select id="findCourseSelectInfoCount" resultType="Integer">
-        select count(id) from course_select_info
+        select count(id) from course_select_info and flag = 1
     </select>
 
     <insert id="insertCourseSelectInfo" parameterType="com.maiqu.domain.model.CourseSelectInfo" useGeneratedKeys="true" keyProperty="id">
@@ -73,11 +73,11 @@
     </delete>
 
     <select id="getCourseSelectInfoById" parameterType="int" resultMap="BaseResultMap">
-        select * from course_select_info where id = #{id}
+        select * from course_select_info where id = #{id} and flag = 1
     </select>
 
     <select id="getCourseSelectInfoByName" parameterType="String" resultMap="BaseResultMap">
-        select * from course_select_info where `name` = #{name}
+        select * from course_select_info where `name` = #{name} and flag = 1
     </select>
 
 

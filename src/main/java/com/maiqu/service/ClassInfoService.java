@@ -1,10 +1,7 @@
 package com.maiqu.service;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
-import com.maiqu.domain.model.ClassInfo;
-import com.maiqu.domain.model.CourseSelectInfo;
-import com.maiqu.domain.model.TechInfo;
-import com.maiqu.domain.model.User;
+import com.maiqu.domain.model.*;
 import com.maiqu.domain.request.CourseSelectVo;
 import com.maiqu.domain.request.TechVo;
 import com.maiqu.domain.request.dto.PageDto;
@@ -89,12 +86,28 @@ public class ClassInfoService {
         if(classId == null){
             return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"课程ID为空");
         }
-
-        if(null == classInfoMapper.getClassInfoById(classId)){
-            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"无法删除,不存在该课程ID");
+        ClassInfo classInfo = classInfoMapper.getClassInfoById(classId);
+        if(classInfo == null){
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"无法删除,不存在该课程");
         }
         classInfoMapper.deleteClassInfo(classId);
         return BaseResponse.success("课程删除成功");
+    }
+
+    /**
+     * 课程详情
+     * @param classId
+     * @return
+     */
+    public BaseResponse<ClassInfo> courseDetail(Integer classId){
+        if(classId == null){
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"课程ID为空");
+        }
+        ClassInfo classInfo = classInfoMapper.getClassInfoById(classId);
+        if(classInfo == null){
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"不存在该课程");
+        }
+        return BaseResponse.success(classInfo);
     }
 
 
@@ -192,11 +205,37 @@ public class ClassInfoService {
      * @return
      */
     public BaseResponse<Boolean> deleteTechInfo(Integer techId){
+        BaseResponse<Boolean> result = new BaseResponse<>();
         if(techId == null){
-            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"参数不合法");
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"教学ID为空");
         }
-        techInfoMapper.deleteTechInfo(techId);
-        return BaseResponse.success("教学删除成功");
+        TechInfo techInfo = techInfoMapper.getTechInfoById(techId);
+        if(techInfo==null){
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"不存在该学员名称");
+        }
+
+        techInfo.setUpdateTime(LocalDateTime.now());
+        techInfo.setFlag(CommonCode.UNACTIVE);
+        techInfoMapper.updateTechInfo(techInfo);
+        result.setData(true);
+        result.setMsg("删除用户成功");
+        return result;
+    }
+
+    /**
+     * 教学详情
+     * @param techId
+     * @return
+     */
+    public BaseResponse<TechInfo> techInfoDetail(Integer techId){
+        if(techId == null){
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"教学ID参数为空");
+        }
+        TechInfo techInfo = techInfoMapper.getTechInfoById(techId);
+        if(techInfo == null){
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"不存在该教学记录");
+        }
+        return BaseResponse.success(techInfo);
     }
 
     /**
@@ -306,11 +345,36 @@ public class ClassInfoService {
      * @return
      */
     public BaseResponse<Boolean> deleteCourseSelectInfo(Integer courseSelectId){
+        BaseResponse<Boolean> result = new BaseResponse<>();
         if(courseSelectId == null){
-            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"参数不合法");
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"选课ID为空");
         }
-        courseSelectInfoMapper.deleteCourseSelectInfo(courseSelectId);
-        return BaseResponse.success("教学删除成功");
+        CourseSelectInfo courseSelectInfo = courseSelectInfoMapper.getCourseSelectInfoById(courseSelectId);
+        if(courseSelectInfo == null){
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"不存在该选课记录");
+        }
+        courseSelectInfo.setUpdateTime(LocalDateTime.now());
+        courseSelectInfo.setFlag(CommonCode.UNACTIVE);
+        courseSelectInfoMapper.updateCourseSelectInfo(courseSelectInfo);
+        result.setMsg("选课删除成功");
+        result.setData(true);
+        return result;
+    }
+
+    /**
+     * 选课详情
+     * @param courseSelectId
+     * @return
+     */
+    public BaseResponse<CourseSelectInfo> courseSelectInfoDetail(Integer courseSelectId){
+        if(courseSelectId == null){
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"选课ID为空");
+        }
+        CourseSelectInfo courseSelectInfo = courseSelectInfoMapper.getCourseSelectInfoById(courseSelectId);
+        if(courseSelectInfo == null){
+            return BaseResponse.fail(CommonCode.REQUEST_PARAM_ERROR,"该选课记录不存在");
+        }
+        return BaseResponse.success(courseSelectInfo);
     }
 
 }

@@ -18,11 +18,11 @@
 
 
     <select id="findTechInfoList" parameterType="com.maiqu.domain.request.dto.PageDto" resultMap="BaseResultMap">
-        select * from tech_info limit #{pageIndex}, #{pageSize}
+        select * from tech_info where flag = 1 limit #{pageIndex}, #{pageSize}
     </select>
 
     <select id="findTechInfoCount" resultType="Integer">
-        select count(id) from tech_info
+        select count(id) from tech_info where flag = 1
     </select>
 
     <insert id="insertTechInfo" parameterType="com.maiqu.domain.model.TechInfo" useGeneratedKeys="true" keyProperty="id">
@@ -65,11 +65,11 @@
     </delete>
 
     <select id="getTechInfoById" parameterType="int" resultMap="BaseResultMap">
-        select * from tech_info where id = #{id}
+        select * from tech_info where id = #{id} and flag = 1
     </select>
 
     <select id="getTechInfoByName" parameterType="String" resultMap="BaseResultMap">
-        select * from tech_info where `name` = #{name}
+        select * from tech_info where `name` = #{name} and flag = 1
     </select>
 
 

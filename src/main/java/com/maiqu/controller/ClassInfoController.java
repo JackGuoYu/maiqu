@@ -1,8 +1,6 @@
 package com.maiqu.controller;
 
-import com.maiqu.domain.model.ClassInfo;
-import com.maiqu.domain.model.Role;
-import com.maiqu.domain.model.TechInfo;
+import com.maiqu.domain.model.*;
 import com.maiqu.domain.request.CourseSelectVo;
 import com.maiqu.domain.request.TechVo;
 import com.maiqu.domain.request.dto.PageDto;
@@ -49,6 +47,12 @@ public class ClassInfoController {
         return BaseResponse.success(classInfoService.deleteCourse(courseId));
     }
 
+    @ApiOperation(value = "课程详情", notes = "课程详情")
+    @GetMapping("/course/detail")
+    public BaseResponse<ClassInfo> courseDetail(Integer courseId){
+        return classInfoService.courseDetail(courseId);
+    }
+
     @ApiOperation(value = "教学列表", notes = "教学列表")
     @PostMapping("/tech/list")
     public BaseResponse<List<TechInfo>> techList(@RequestBody PageDto pageDto){
@@ -73,6 +77,11 @@ public class ClassInfoController {
         return BaseResponse.success(classInfoService.deleteTechInfo(techId));
     }
 
+    @ApiOperation(value = "教学详情", notes = "教学详情")
+    @GetMapping("/tech/detail")
+    public BaseResponse<Boolean> techDetail(Integer techId){
+        return BaseResponse.success(classInfoService.techInfoDetail(techId));
+    }
 
     @ApiOperation(value = "选课列表", notes = "选课列表")
     @PostMapping("/courseSelect/list")
@@ -96,5 +105,11 @@ public class ClassInfoController {
     @GetMapping("/courseSelect/delete")
     public BaseResponse<Boolean> deleteCourseSelectInfo(Integer courseSelectId){
         return BaseResponse.success(classInfoService.deleteCourseSelectInfo(courseSelectId));
+    }
+
+    @ApiOperation(value = "选课详情", notes = "删除选课")
+    @GetMapping("/courseSelect/detail")
+    public BaseResponse<CourseSelectInfo> courseSelectInfoDetail(Integer courseSelectId){
+        return BaseResponse.success(classInfoService.courseSelectInfoDetail(courseSelectId));
     }
 }

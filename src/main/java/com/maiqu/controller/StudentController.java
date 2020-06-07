@@ -46,7 +46,7 @@ public class StudentController {
         return studentService.studentList(pageDto);
     }
 
-    @ApiOperation(value = "用户详情", notes = "用户详情")
+    @ApiOperation(value = "学员详情", notes = "学员详情")
     @GetMapping("/detail")
     public BaseResponse<Student> studentDetail(Integer stuId){
         return studentService.studentDetail(stuId);
