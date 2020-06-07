@@ -131,7 +131,7 @@ public class StudentService {
         updateStudent.setFlag(CommonCode.UNACTIVE);
         studentMapper.updateStudent(updateStudent);
         result.setData(true);
-        result.setMsg("删除用户成功");
+        result.setMsg("删除学员成功");
         return result;
     }
 
