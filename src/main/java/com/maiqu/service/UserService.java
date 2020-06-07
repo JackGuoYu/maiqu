@@ -26,11 +26,13 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -47,7 +49,19 @@ public class UserService {
     private UserRoleMapper userRoleMapper;
 
     public User getUser(Integer userId){
-       return userMapper.getUser(userId);
+        User user = userMapper.getUser(userId);
+        if(user == null){
+            return null;
+        }
+        if(user.getBirthDate() != null){
+            LocalDate now = LocalDate.now();
+            LocalDate birthdate = user.getBirthDate().toLocalDate();
+            Integer age = birthdate.until(now).getYears();
+            user.setAge(age);
+        }else{
+            user.setAge(0);
+        }
+       return user;
     }
 
     @Transactional
@@ -304,6 +318,17 @@ public class UserService {
         if(users == null && users.size() == 0){
             return BaseResponse.success(Page.fail());
         }
+        users = users.stream().map(user -> {
+            if(user.getBirthDate() != null){
+                LocalDate now = LocalDate.now();
+                LocalDate birthdate = user.getBirthDate().toLocalDate();
+                Integer age = birthdate.until(now).getYears();
+                user.setAge(age);
+            }else{
+                user.setAge(0);
+            }
+            return user;
+        }).collect(Collectors.toList());
         Integer total = userMapper.findUserListCount(userDto);
         Integer pageNumber = userDto.getPageNumber(total);
         return BaseResponse.success(Page.success(total,pageNumber,users));

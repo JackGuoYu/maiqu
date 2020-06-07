@@ -21,6 +21,8 @@ public class UserVo {
     private Integer sex;
     @ApiModelProperty(value = "出生日期")
     private String  birthDate;
+    @ApiModelProperty(value = "age")
+    private Integer age;
     @ApiModelProperty(value = "角色ID")
     private Integer  roleId;
     @ApiModelProperty(value = "角色名称")

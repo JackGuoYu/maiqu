@@ -17,6 +17,7 @@ public class User {
     private Integer roleId;
     private String roleName;
     private String address;
+    private Integer age;
     private LocalDateTime birthDate;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
