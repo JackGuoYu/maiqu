@@ -15,9 +15,13 @@ public class PageDto {
 
     //获取总页数
     public Integer getPageNumber(Integer total){
-        if(total<this.pageSize){
+        if(total>0 && total<this.pageSize){
             return this.pageSize/total;
         }
-        return (total/this.pageSize) + (total%this.pageSize);
+        Integer pageNumber = total/this.pageSize;
+        if(total%this.pageSize > 0){
+            pageNumber += 1;
+        }
+        return  pageNumber;
     }
 }
